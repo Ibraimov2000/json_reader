@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class State {
 
+    @Override
+    public String toString() {
+        return filenameToRead + " " + lastProcessedLine + " " + lastFileCount;
+    }
+
     private String filenameToRead;
     private int lastProcessedLine;
     private int lastFileCount;

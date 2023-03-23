@@ -1,7 +1,7 @@
 package com.example.json_reader;
 
 import com.example.json_reader.model.State;
-import com.example.json_reader.service.RecordFileProcessor;
+import com.example.json_reader.service.RecordProcessor;
 import com.example.json_reader.service.StateService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,7 +16,7 @@ public class JsonReaderApplication {
         File folder = new File(Constant.FOLDER_PATH);
         File[] files = folder.listFiles();
 
-        State state = StateService.getState();
+        State state = StateService.getState(new File(Constant.CONFIG_FILE));
 
         if (files != null) {
             if(state.getFilenameToRead() != null) {
@@ -26,8 +26,8 @@ public class JsonReaderApplication {
                     }
                     String fileName = state.getFilenameToRead();
 
-                    if (RecordFileProcessor.compareFiles(file.getName(), fileName)) {
-                        RecordFileProcessor processor = new RecordFileProcessor(file);
+                    if (RecordProcessor.compareFiles(file.getName(), fileName)) {
+                        RecordProcessor processor = new RecordProcessor(file);
                         processor.processRecords();
                     }
                 }
@@ -38,7 +38,7 @@ public class JsonReaderApplication {
                     continue;
                 }
 
-                RecordFileProcessor processor = new RecordFileProcessor(file);
+                RecordProcessor processor = new RecordProcessor(file);
                 if(processor.isFileProcessed()) {
                     continue;
                 }
