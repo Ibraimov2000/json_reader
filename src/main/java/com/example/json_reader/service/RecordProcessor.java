@@ -96,7 +96,7 @@ public class RecordProcessor {
         try {
             State state = StateService.getState(configFile);
 
-            int recordCount = state.getLastProcessedLine();
+            int recordCount = 0;//state.getLastProcessedLine();
             int fileNumber = state.getLastFileCount();
 
             reader = new BufferedReader(new FileReader(fileFullName));
@@ -108,32 +108,25 @@ public class RecordProcessor {
 
             writer = new BufferedWriter(new FileWriter(getNewFilename(fileNumber), true));
 
-            while (line != null) {
+            while (reader.ready()) {
                 line = reader.readLine();
 
                 if(line == null) {
                     break;
                 }
-                recordCount++;
 
-                int batchSize = Constant.BATCH_SIZE - 1;
-
-                if (fileNumber == 0) {
-                     batchSize = Constant.BATCH_SIZE;
-                }
-
-                if (recordCount == batchSize) {
+                if (recordCount == Constant.BATCH_SIZE) {
                     writer.close();
                     fileNumber++;
                     writer = new BufferedWriter(new FileWriter(getNewFilename(fileNumber)));
                     recordCount = 0;
                 }
-                writer.write(line);
-                writer.newLine();
+                writer.write(line + '\r');
                 writer.flush();
+                recordCount++;
 
-                log.info("IN processRecords, count of record: {}, data: {} written to file: {}", recordCount, line, ++fileNumber);
-                StateService.updateState(configFile, recordCount, fileNumber, filename);
+                log.info("IN processRecords, count of record: {}, data: {} written to file: {}", recordCount, line, fileNumber);
+                StateService.updateState(configFile, recordCount, fileNumber + 1, filename);
             }
             StateService.deleteState(configFile);
         } finally {
