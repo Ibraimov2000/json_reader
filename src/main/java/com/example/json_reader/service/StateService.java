@@ -1,9 +1,11 @@
 package com.example.json_reader.service;
 
 import com.example.json_reader.model.State;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
+@Slf4j
 public class StateService {
 
     public static State getState(File file) throws IOException {
@@ -21,6 +23,7 @@ public class StateService {
                 }
             }
         }
+        log.info("IN getState, the state: {} got", state);
         return state;
     }
 
@@ -34,11 +37,13 @@ public class StateService {
             fileWriter.write(state.toString());
             fileWriter.flush();
         }
+        log.info("IN updateState,the state: {} saved", state.toString());
     }
 
     public static void deleteState(File file) {
         if (file.exists()) {
             file.delete();
         }
+        log.info("IN deleteState, file: {} removed", file);
     }
 }

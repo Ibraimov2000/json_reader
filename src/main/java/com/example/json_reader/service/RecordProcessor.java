@@ -2,9 +2,11 @@ package com.example.json_reader.service;
 
 import com.example.json_reader.Constant;
 import com.example.json_reader.model.State;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
+@Slf4j
 public class RecordProcessor {
 
     private String filename;
@@ -130,6 +132,7 @@ public class RecordProcessor {
                 writer.newLine();
                 writer.flush();
 
+                log.info("IN processRecords, count of record: {}, data: {} written to file: {}", recordCount, line, ++fileNumber);
                 StateService.updateState(configFile, recordCount, fileNumber, filename);
             }
             StateService.deleteState(configFile);
