@@ -32,6 +32,7 @@ public class StateService {
 
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write(state.toString());
+            fileWriter.flush();
         }
     }
 

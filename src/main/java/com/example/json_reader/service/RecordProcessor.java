@@ -128,6 +128,7 @@ public class RecordProcessor {
                 }
                 writer.write(line);
                 writer.newLine();
+                writer.flush();
 
                 StateService.updateState(configFile, recordCount, fileNumber, filename);
             }
